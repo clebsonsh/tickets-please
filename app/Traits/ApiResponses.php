@@ -6,7 +6,6 @@ trait ApiResponses
 {
     protected function ok($message)
     {
-        response()->ok($message);
         return $this->success($message);
     }
 

@@ -29,6 +29,8 @@ class AuthController extends Controller
             [
                 'token' => $user->createToken(
                     'API token for '.$user->name,
+                    ['*'],
+                    now()->addMonth(),
                 )->plainTextToken,
             ],
         );
@@ -41,6 +43,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+
         $request->user()->currentAccessToken()->delete();
 
         return $this->ok('');

@@ -13,7 +13,7 @@ trait ApiResponses
     {
         return response()->json([
             'message' => $message,
-            'status' => $statusCode
+            'status' => $statusCode,
         ], $statusCode);
     }
 }

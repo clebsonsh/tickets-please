@@ -21,14 +21,19 @@ trait ApiResponses
                 'message' => $message,
                 'data' => $data,
                 'status' => $statusCode,
-            ], $statusCode);
+            ],
+            $statusCode
+        );
     }
 
     protected function error($message, $statusCode)
     {
-        return response()->json([
-            'message' => $message,
-            'status' => $statusCode,
-        ], $statusCode);
+        return response()->json(
+            [
+                'message' => $message,
+                'status' => $statusCode,
+            ],
+            $statusCode
+        );
     }
 }

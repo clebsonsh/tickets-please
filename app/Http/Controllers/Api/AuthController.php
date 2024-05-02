@@ -18,7 +18,7 @@ class AuthController extends Controller
     {
         $validated = new LoginData(...$request->validated());
 
-        if (! auth()->attempt(['email' => $validated->email, 'password' => $validated->password])) {
+        if (!auth()->attempt(['email' => $validated->email, 'password' => $validated->password])) {
             return $this->error('Invalid credentials', Response::HTTP_UNAUTHORIZED);
         }
 
@@ -28,7 +28,7 @@ class AuthController extends Controller
             'Authenticated',
             [
                 'token' => $user->createToken(
-                    'API token for '.$user->name,
+                    'API token for ' . $user->name,
                     ['*'],
                     now()->addMonth(),
                 )->plainTextToken,

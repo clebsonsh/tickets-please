@@ -7,15 +7,23 @@ use App\Http\Requests\Api\V1\StoreTicketRequest;
 use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
+use App\Traits\ApiIncludes;
 
 class TicketController extends Controller
 {
+    use ApiIncludes;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return TicketResource::collection(Ticket::paginate());
+        $query = Ticket::query();
+
+        if ($this->include('user')) {
+            $query->with('user');
+        }
+
+        return TicketResource::collection($query->paginate());
     }
 
     /**
@@ -31,6 +39,10 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
+        if ($this->include('user')) {
+            $ticket->load('user');
+        }
+
         return new TicketResource($ticket);
     }
 

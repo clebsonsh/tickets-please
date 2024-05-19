@@ -10,6 +10,9 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    /**
+     * @return BelongsTo<User, Ticket>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

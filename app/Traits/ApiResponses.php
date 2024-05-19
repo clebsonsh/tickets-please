@@ -2,11 +2,15 @@
 
 namespace App\Traits;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 trait ApiResponses
 {
-    protected function ok($message, $data = [])
+    /**
+     * @param  array<string, string>  $data
+     */
+    protected function ok(string $message, array $data = []): JsonResponse
     {
         return $this->success(
             $message,
@@ -14,7 +18,10 @@ trait ApiResponses
         );
     }
 
-    protected function success($message, $data = [], $statusCode = Response::HTTP_OK)
+    /**
+     * @param  array<string, string>  $data
+     */
+    protected function success(string $message, array $data = [], int $statusCode = Response::HTTP_OK): JsonResponse
     {
         return response()->json(
             [
@@ -26,7 +33,7 @@ trait ApiResponses
         );
     }
 
-    protected function error($message, $statusCode)
+    protected function error(string $message, int $statusCode): JsonResponse
     {
         return response()->json(
             [

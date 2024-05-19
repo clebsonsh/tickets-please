@@ -8,14 +8,14 @@ use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
 use App\Traits\ApiIncludes;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class TicketController extends Controller
 {
     use ApiIncludes;
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(): AnonymousResourceCollection
     {
         $query = Ticket::query();
 
@@ -26,18 +26,12 @@ class TicketController extends Controller
         return TicketResource::collection($query->paginate());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreTicketRequest $request)
+    public function store(StoreTicketRequest $request): void
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Ticket $ticket)
+    public function show(Ticket $ticket): JsonResource
     {
         if ($this->include('user')) {
             $ticket->load('user');
@@ -46,18 +40,12 @@ class TicketController extends Controller
         return new TicketResource($ticket);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTicketRequest $request, Ticket $ticket)
+    public function update(UpdateTicketRequest $request, Ticket $ticket): void
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Ticket $ticket)
+    public function destroy(Ticket $ticket): void
     {
         //
     }

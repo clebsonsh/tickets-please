@@ -6,9 +6,11 @@ trait ApiIncludes
 {
     public function include(string $relationship): bool
     {
-        $param = request('include');
+        $param = request()->string('include');
 
-        if (!isset($param)) return false;
+        if ($param->isEmpty()) {
+            return false;
+        }
 
         $includeValues = explode(',', strtolower($param));
 

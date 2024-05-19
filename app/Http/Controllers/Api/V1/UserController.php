@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Http\Requests\Api\V1\StoreUserRequest;
 use App\Http\Requests\Api\V1\UpdateUserRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Models\User;
 use App\Traits\ApiIncludes;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserController extends Controller
 {
     use ApiIncludes;
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(): AnonymousResourceCollection
     {
         $query = User::query();
 
@@ -26,18 +26,12 @@ class UserController extends Controller
         return UserResource::collection($query->paginate());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): void
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
+    public function show(User $user): JsonResource
     {
         if ($this->include('tickets')) {
             $user->load('tickets');
@@ -46,19 +40,12 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): void
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
+    public function destroy(User $user): void
     {
         //
     }

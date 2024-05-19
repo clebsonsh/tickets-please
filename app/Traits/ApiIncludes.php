@@ -10,8 +10,8 @@ trait ApiIncludes
 
         if (!isset($param)) return false;
 
-        $includeValuess = explode(',', strtolower($param));
+        $includeValues = explode(',', strtolower($param));
 
-        return in_array(strtolower($relationship), $includeValuess);
+        return in_array(strtolower($relationship), $includeValues);
     }
 }

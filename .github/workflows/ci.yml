@@ -11,11 +11,11 @@ permissions:
   pull-requests: write
 
 jobs:
-  #  larastan:
-  #    uses: clebsonsh/ci/.github/workflows/larastan.yml@main
-  #    with:
-  #      PHP_STAN_LEVEL: 5
-  #      STOP_ON_ERROR: true
+  larastan:
+    uses: clebsonsh/ci/.github/workflows/php-stan.yml@main
+    with:
+      PHP_STAN_LEVEL: 9
+      STOP_ON_ERROR: true
   pint:
     uses: clebsonsh/ci/.github/workflows/pint.yml@main
     with:

@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreUserRequest;
 use App\Http\Requests\Api\V1\UpdateUserRequest;
-use App\Http\Resources\V1\UserResource;
+use App\Http\Resources\V1\AuthorResource;
 use App\Models\User;
 use App\Traits\ApiIncludes;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserController extends Controller
+class AuthorController extends Controller
 {
     use ApiIncludes;
 
@@ -23,7 +23,7 @@ class UserController extends Controller
             $query->with('tickets');
         }
 
-        return UserResource::collection($query->paginate());
+        return AuthorResource::collection($query->paginate());
     }
 
     public function store(StoreUserRequest $request): void
@@ -31,21 +31,21 @@ class UserController extends Controller
         //
     }
 
-    public function show(User $user): JsonResource
+    public function show(User $author): JsonResource
     {
         if ($this->include('tickets')) {
-            $user->load('tickets');
+            $author->load('tickets');
         }
 
-        return new UserResource($user);
+        return new AuthorResource($author);
     }
 
-    public function update(UpdateUserRequest $request, User $user): void
+    public function update(UpdateUserRequest $request, User $author): void
     {
         //
     }
 
-    public function destroy(User $user): void
+    public function destroy(User $author): void
     {
         //
     }

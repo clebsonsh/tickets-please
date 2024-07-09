@@ -18,7 +18,11 @@ class TicketController extends Controller
 
     public function index(TicketFilter $filters): AnonymousResourceCollection
     {
-        return TicketResource::collection(Ticket::filter($filters)->paginate());
+        return TicketResource::collection(
+            Ticket::query()
+                ->filter($filters)
+                ->paginate()
+        );
     }
 
     public function store(StoreTicketRequest $request): void

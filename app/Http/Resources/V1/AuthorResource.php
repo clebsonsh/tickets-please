@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin User
  */
-class UserResource extends JsonResource
+class AuthorResource extends JsonResource
 {
     /**
      * @return array<string, mixed>
@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'attributes' => [
                 'name' => $this->name,
                 'email' => $this->email,
-                $this->mergeWhen($request->routeIs('users.*'), [
+                $this->mergeWhen($request->routeIs('authors.*'), [
                     'emailVerifiedAt' => $this->email_verified_at,
                     'createdAt' => $this->created_at,
                     'updatedAt' => $this->updated_at,
@@ -32,7 +32,7 @@ class UserResource extends JsonResource
                 'tickets' => TicketResource::collection($this->whenLoaded('tickets')),
             ]),
             'links' => [
-                'self' => route('users.show', ['user' => $this->id]),
+                'self' => route('authors.show', ['author' => $this->id]),
             ],
         ];
     }

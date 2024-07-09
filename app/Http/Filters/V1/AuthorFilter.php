@@ -5,11 +5,11 @@ namespace App\Http\Filters\V1;
 use App\Models\Ticket;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
-class TicketFilter extends QueryFilter
+class AuthorFilter extends QueryFilter
 {
     protected array $sortable = [
-        'title',
-        'status',
+        'name',
+        'email',
         'createdAt' => 'created_at',
         'updatedAt' => 'updated_at',
     ];
@@ -23,19 +23,19 @@ class TicketFilter extends QueryFilter
         return $this->builder;
     }
 
-    public function title(string $value): Builder
+    public function id(string $value): Builder
     {
-        return $this->builder->where('title', 'like', str_replace('*', '%', $value));
+        return $this->builder->whereIn('id', explode(',', $value));
     }
 
-    public function description(string $value): Builder
+    public function name(string $value): Builder
     {
-        return $this->builder->where('description', 'like', str_replace('*', '%', $value));
+        return $this->builder->where('name', 'like', str_replace('*', '%', $value));
     }
 
-    public function status(string $value): Builder
+    public function email(string $value): Builder
     {
-        return $this->builder->whereIn('status', explode(',', $value));
+        return $this->builder->where('email', 'like', str_replace('*', '%', $value));
     }
 
     public function createdAt(string $value): Builder

@@ -3,22 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Data\TicketData;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
 use App\Http\Filters\V1\TicketFilter;
 use App\Http\Requests\Api\V1\StoreTicketRequest;
 use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
-use App\Traits\ApiIncludes;
-use App\Traits\ApiResponses;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TicketController extends Controller
+class TicketController extends ApiController
 {
-    use ApiIncludes, ApiResponses;
-
     public function index(TicketFilter $filters): AnonymousResourceCollection
     {
         return TicketResource::collection(
@@ -56,8 +53,15 @@ class TicketController extends Controller
         //
     }
 
-    public function destroy(Ticket $ticket): void
+    public function destroy(int $ticket_id): JsonResponse
     {
-        //
+        try {
+            $ticket = Ticket::findOrFail($ticket_id);
+            $ticket->delete();
+
+            return $this->ok('Ticket successfully deleted');
+        } catch (ModelNotFoundException) {
+            return $this->error('Ticket cannot be found', 404);
+        }
     }
 }

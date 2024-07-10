@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
 use App\Http\Filters\V1\AuthorFilter;
 use App\Http\Requests\Api\V1\StoreUserRequest;
 use App\Http\Requests\Api\V1\UpdateUserRequest;
 use App\Http\Resources\V1\AuthorResource;
 use App\Models\User;
-use App\Traits\ApiIncludes;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthorController extends Controller
+class AuthorController extends ApiController
 {
-    use ApiIncludes;
-
     public function index(AuthorFilter $filters): AnonymousResourceCollection
     {
         return AuthorResource::collection(

@@ -9,6 +9,5 @@ class TicketData
         public string $description,
         public string $status,
         public int $user_id,
-    ) {
-    }
+    ) {}
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Filters\V1;
 
-use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class AuthorFilter extends QueryFilter
@@ -16,7 +16,7 @@ class AuthorFilter extends QueryFilter
 
     public function include(string $value): Builder
     {
-        if (method_exists(new Ticket(), $value)) {
+        if (method_exists(new User(), $value)) {
             $this->builder->with($value);
         }
 

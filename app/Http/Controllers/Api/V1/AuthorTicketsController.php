@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Data\TicketData;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Filters\V1\TicketFilter;
+use App\Http\Requests\Api\V1\ReplaceTicketRequest;
 use App\Http\Requests\Api\V1\StoreTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
@@ -46,6 +47,30 @@ class AuthorTicketsController extends ApiController
         $ticket = Ticket::create((array) $validated);
 
         return new TicketResource($ticket);
+    }
+
+    public function replace(ReplaceTicketRequest $request, int $author_id, int $ticket_id): TicketResource|JsonResponse
+    {
+        try {
+            $ticket = Ticket::findOrFail($ticket_id);
+
+            if ($ticket->user_id != $author_id) {
+                throw new ModelNotFoundException();
+            }
+
+            $validated = new TicketData(
+                $request->string('data.attributes.title'),
+                $request->string('data.attributes.description'),
+                $request->string('data.attributes.status'),
+                $request->integer('data.relationships.author.data.id'),
+            );
+
+            $ticket->update((array) $validated);
+
+            return new TicketResource($ticket);
+        } catch (ModelNotFoundException) {
+            return $this->error('Ticket cannot be found', 404);
+        }
     }
 
     public function destroy(int $author_id, int $ticket_id): JsonResponse

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Data\TicketData;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Filters\V1\TicketFilter;
 use App\Http\Requests\Api\V1\ReplaceTicketRequest;
@@ -28,16 +27,7 @@ class TicketController extends ApiController
 
     public function store(StoreTicketRequest $request): JsonResponse|JsonResource
     {
-        $validated = new TicketData(
-            $request->string('data.attributes.title'),
-            $request->string('data.attributes.description'),
-            $request->string('data.attributes.status'),
-            $request->integer('data.relationships.author.data.id'),
-        );
-
-        $ticket = Ticket::create((array) $validated);
-
-        return new TicketResource($ticket);
+        return new TicketResource(Ticket::create($request->mappedAttribues()));
     }
 
     public function show(Ticket $ticket): JsonResource
@@ -49,9 +39,17 @@ class TicketController extends ApiController
         return new TicketResource($ticket);
     }
 
-    public function update(UpdateTicketRequest $request, int $ticket_id): void
+    public function update(UpdateTicketRequest $request, int $ticket_id): TicketResource|JsonResponse
     {
-        // ToDo
+        try {
+            $ticket = Ticket::findOrFail($ticket_id);
+
+            $ticket->update($request->mappedAttribues());
+
+            return new TicketResource($ticket);
+        } catch (ModelNotFoundException) {
+            return $this->error('Ticket cannot be found', 404);
+        }
     }
 
     public function replace(ReplaceTicketRequest $request, int $ticket_id): TicketResource|JsonResponse
@@ -59,14 +57,7 @@ class TicketController extends ApiController
         try {
             $ticket = Ticket::findOrFail($ticket_id);
 
-            $validated = new TicketData(
-                $request->string('data.attributes.title'),
-                $request->string('data.attributes.description'),
-                $request->string('data.attributes.status'),
-                $request->integer('data.relationships.author.data.id'),
-            );
-
-            $ticket->update((array) $validated);
+            $ticket->update($request->mappedAttribues());
 
             return new TicketResource($ticket);
         } catch (ModelNotFoundException) {

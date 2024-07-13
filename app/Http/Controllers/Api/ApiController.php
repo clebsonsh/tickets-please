@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Traits\ApiResponses;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 
 abstract class ApiController
 {
     use ApiResponses;
 
-    protected $policyClass;
+    protected string $policyClass;
 
     public function include(string $relationship): bool
     {
@@ -25,7 +26,7 @@ abstract class ApiController
         return in_array(strtolower($relationship), $includeValues);
     }
 
-    public function isAble($ability, $targetModel): Response
+    public function isAble(string $ability, Model $targetModel): Response
     {
         return Gate::authorize($ability, [$targetModel, $this->policyClass]);
     }

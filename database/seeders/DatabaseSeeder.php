@@ -16,7 +16,14 @@ class DatabaseSeeder extends Seeder
         $users = User::factory(10)->create();
 
         User::factory()->create([
-            'email' => 'admin@mail.com',
+            'name' => 'Not Manager',
+            'email' => 'notmanager@mail.com',
+        ]);
+
+        User::factory()->create([
+            'name' => 'The Manager',
+            'email' => 'manager@mail.com',
+            'is_manager' => true,
         ]);
 
         Ticket::factory(100)

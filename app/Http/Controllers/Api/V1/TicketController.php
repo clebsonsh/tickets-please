@@ -17,7 +17,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TicketController extends ApiController
 {
-    protected $policyClass = TicketPolicy::class;
+    protected string $policyClass = TicketPolicy::class;
 
     public function index(TicketFilter $filters): AnonymousResourceCollection
     {
@@ -30,7 +30,11 @@ class TicketController extends ApiController
 
     public function store(StoreTicketRequest $request): JsonResponse|JsonResource
     {
-        return new TicketResource(Ticket::create($request->mappedAttribues()));
+        $ticket = new Ticket;
+
+        $this->isAble('store', $ticket);
+
+        return new TicketResource($ticket->create($request->mappedAttribues()));
     }
 
     public function show(Ticket $ticket): JsonResource
@@ -62,6 +66,8 @@ class TicketController extends ApiController
         try {
             $ticket = Ticket::findOrFail($ticket_id);
 
+            $this->isAble('replace', $ticket);
+
             $ticket->update($request->mappedAttribues());
 
             return new TicketResource($ticket);
@@ -74,6 +80,9 @@ class TicketController extends ApiController
     {
         try {
             $ticket = Ticket::findOrFail($ticket_id);
+
+            $this->isAble('delete', $ticket);
+
             $ticket->delete();
 
             return $this->ok('Ticket successfully deleted');

@@ -9,6 +9,7 @@ use App\Http\Requests\Api\V1\StoreTicketRequest;
 use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
+use App\Policies\V1\TicketPolicy;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -16,6 +17,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TicketController extends ApiController
 {
+    protected $policyClass = TicketPolicy::class;
+
     public function index(TicketFilter $filters): AnonymousResourceCollection
     {
         return TicketResource::collection(
@@ -43,6 +46,8 @@ class TicketController extends ApiController
     {
         try {
             $ticket = Ticket::findOrFail($ticket_id);
+
+            $this->isAble('update', $ticket);
 
             $ticket->update($request->mappedAttribues());
 

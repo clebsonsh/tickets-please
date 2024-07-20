@@ -20,3 +20,7 @@ jobs:
     uses: clebsonsh/ci/.github/workflows/pint.yml@main
     with:
       STOP_ON_ERROR: true
+  pest:
+    uses: clebsonsh/ci/.github/workflows/pest.yml@main
+    with:
+      STOP_ON_ERROR: true

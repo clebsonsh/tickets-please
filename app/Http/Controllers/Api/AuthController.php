@@ -17,7 +17,7 @@ class AuthController extends ApiController
     {
         $validated = new LoginData($request->string('email'), $request->string('password'));
 
-        if (! Auth::attempt(['email' => $validated->email, 'password' => $validated->password])) {
+        if (! Auth::validate(['email' => $validated->email, 'password' => $validated->password])) {
             return $this->error('Invalid credentials', Response::HTTP_UNAUTHORIZED);
         }
 
@@ -44,7 +44,7 @@ class AuthController extends ApiController
     public function logout(): JsonResponse
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = auth('sanctum')->user();
 
         /** @var PersonalAccessToken $currentToken */
         $currentToken = $user->currentAccessToken();

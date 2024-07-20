@@ -12,7 +12,7 @@ class AuthTest extends BaseTest
 {
     use RefreshDatabase;
 
-    public function test_login_works(): void
+    public function testUsersCanLogin(): void
     {
         $response = $this->loginAs($this->validUser);
 
@@ -28,7 +28,7 @@ class AuthTest extends BaseTest
             ])->assertStatus(Response::HTTP_OK);
     }
 
-    public function test_login_fails_without_email(): void
+    public function testLoginFailsWithoutEmail(): void
     {
         $response = $this->loginAs([
             'password' => 'password',
@@ -46,7 +46,7 @@ class AuthTest extends BaseTest
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function test_login_fails_without_password(): void
+    public function testLoginFailsWithoutPassword(): void
     {
         $response = $this->loginAs([
             'email' => 'test@mail.com',
@@ -64,7 +64,7 @@ class AuthTest extends BaseTest
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    public function test_login_fails_with_wrong_credentials(): void
+    public function testLoginFailsWithWrongCredentials(): void
     {
         $this->loginAs([
             'email' => 'test@mail.com',
@@ -112,7 +112,7 @@ class AuthTest extends BaseTest
             ->assertstatus(Response::HTTP_UNAUTHORIZED);
     }
 
-    public function test_users_can_logout(): void
+    public function testUsersCanLogout(): void
     {
         $loginResponse = $this->loginAs($this->validUser);
 

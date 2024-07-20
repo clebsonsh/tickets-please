@@ -7,8 +7,8 @@ use App\Http\Requests\Api\LoginUserRequest;
 use App\Models\User;
 use App\Permissions\V1\Abilities;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends ApiController
@@ -17,7 +17,7 @@ class AuthController extends ApiController
     {
         $validated = new LoginData($request->string('email'), $request->string('password'));
 
-        if (! auth()->attempt(['email' => $validated->email, 'password' => $validated->password])) {
+        if (! Auth::attempt(['email' => $validated->email, 'password' => $validated->password])) {
             return $this->error('Invalid credentials', Response::HTTP_UNAUTHORIZED);
         }
 
@@ -41,10 +41,10 @@ class AuthController extends ApiController
         return $this->ok('register');
     }
 
-    public function logout(Request $request): JsonResponse
+    public function logout(): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
 
         /** @var PersonalAccessToken $currentToken */
         $currentToken = $user->currentAccessToken();

@@ -3,8 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Http\Filters\V1\QueryFilter;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
     /**

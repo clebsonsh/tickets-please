@@ -108,12 +108,23 @@ class AuthTest extends BaseTest
 
     public function test_users_can_logout(): void
     {
-        $this->markTestSkipped('work in this test later');
-        /* $user = User::factory()->create(); */
+        $loginResponse = $this->loginAs($this->validUser);
 
-        /* $response = $this->actingAs($user)->delete(route('logout')); */
+        /** @var string $token */
+        $token = Arr::get($loginResponse, 'data.token');
 
-        /* $this->assertGuest(); */
-        /* $response->assertNoContent(); */
+        $response = $this->withToken($token)->delete(route('logout'));
+
+        $token = PersonalAccessToken::firstWhere('token', $token);
+
+        $this->assertNull($token);
+
+        $response
+            ->assertJson([
+                'message' => '',
+                'data' => [],
+                'status' => Response::HTTP_OK,
+            ])
+            ->assertstatus(Response::HTTP_OK);
     }
 }

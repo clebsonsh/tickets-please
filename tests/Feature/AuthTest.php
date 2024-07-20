@@ -17,6 +17,7 @@ class AuthTest extends BaseTest
         $response = $this->loginAs($this->validUser);
 
         $response
+            ->assertJsonMissingValidationErrors(['email', 'password'])
             ->assertJsonStructure([
                 'message',
                 'data' => ['token'],
@@ -34,6 +35,7 @@ class AuthTest extends BaseTest
         ]);
 
         $response
+            ->assertJsonMissingValidationErrors(['password'])
             ->assertJsonStructure([
                 'message',
                 'errors' => ['email'],
@@ -51,6 +53,7 @@ class AuthTest extends BaseTest
         ]);
 
         $response
+            ->assertJsonMissingValidationErrors(['email'])
             ->assertJsonStructure([
                 'message',
                 'errors' => ['password'],
@@ -74,6 +77,7 @@ class AuthTest extends BaseTest
         ]);
 
         $response
+            ->assertJsonMissingValidationErrors(['email', 'password'])
             ->assertJson([
 
                 'message' => 'Invalid credentials',
@@ -87,6 +91,7 @@ class AuthTest extends BaseTest
         ]);
 
         $response
+            ->assertJsonMissingValidationErrors(['email', 'password'])
             ->assertJson([
                 'message' => 'Invalid credentials',
                 'status' => Response::HTTP_UNAUTHORIZED,
@@ -99,6 +104,7 @@ class AuthTest extends BaseTest
         ]);
 
         $response
+            ->assertJsonMissingValidationErrors(['email', 'password'])
             ->assertJson([
                 'message' => 'Invalid credentials',
                 'status' => Response::HTTP_UNAUTHORIZED,

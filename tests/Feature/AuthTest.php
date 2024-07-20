@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
+use Laravel\Sanctum\PersonalAccessToken;
 use Tests\BaseTest;
 
 class AuthTest extends BaseTest
@@ -13,13 +14,7 @@ class AuthTest extends BaseTest
 
     public function test_login_works(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-
-        $response = $this->post(route('login'), [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
+        $response = $this->loginAs($this->validUser);
 
         $response
             ->assertJsonStructure([
@@ -34,7 +29,7 @@ class AuthTest extends BaseTest
 
     public function test_login_fails_without_email(): void
     {
-        $response = $this->postJson(route('login'), [
+        $response = $this->loginAs([
             'password' => 'password',
         ]);
 
@@ -46,12 +41,12 @@ class AuthTest extends BaseTest
             ->assertJsonValidationErrors(
                 ['email' => 'The email field is required.'],
             )
-            ->assertStatus(422);
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function test_login_fails_without_password(): void
     {
-        $response = $this->postJson(route('login'), [
+        $response = $this->loginAs([
             'email' => 'test@mail.com',
         ]);
 
@@ -68,11 +63,13 @@ class AuthTest extends BaseTest
 
     public function test_login_fails_with_wrong_credentials(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
+        $this->loginAs([
+            'email' => 'test@mail.com',
+            'password' => 'password',
+        ]);
 
         $response = $this->postJson(route('login'), [
-            'email' => $user->email,
+            'email' => $this->user->email,
             'password' => 'wrong-password',
         ]);
 
@@ -91,7 +88,6 @@ class AuthTest extends BaseTest
 
         $response
             ->assertJson([
-
                 'message' => 'Invalid credentials',
                 'status' => Response::HTTP_UNAUTHORIZED,
             ])
@@ -104,7 +100,6 @@ class AuthTest extends BaseTest
 
         $response
             ->assertJson([
-
                 'message' => 'Invalid credentials',
                 'status' => Response::HTTP_UNAUTHORIZED,
             ])

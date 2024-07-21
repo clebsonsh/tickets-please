@@ -129,4 +129,16 @@ class AuthControllerTest extends BaseTest
             ])
             ->assertstatus(Response::HTTP_OK);
     }
+
+    public function testGuestCanNotLogout(): void
+    {
+        $response = $this->deleteJson(route('logout'));
+
+        $response
+            ->assertJson([
+                'message' => 'Unauthenticated.',
+            ])
+            ->assertJsonMissingPath('data.token')
+            ->assertstatus(Response::HTTP_UNAUTHORIZED);
+    }
 }

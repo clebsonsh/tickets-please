@@ -1,14 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Laravel\Sanctum\PersonalAccessToken;
 use Tests\BaseTest;
 
-class AuthTest extends BaseTest
+class AuthControllerTest extends BaseTest
 {
     use RefreshDatabase;
 
@@ -114,14 +113,11 @@ class AuthTest extends BaseTest
 
     public function testUsersCanLogout(): void
     {
-        $loginResponse = $this->loginAs($this->validUser);
+        $this->loginAs($this->validUser);
 
-        /** @var string $token */
-        $token = Arr::get($loginResponse, 'data.token');
+        $response = $this->withToken($this->token)->deleteJson(route('logout'));
 
-        $response = $this->withToken($token)->delete(route('logout'));
-
-        $token = PersonalAccessToken::firstWhere('token', $token);
+        $token = PersonalAccessToken::firstWhere('token', $this->token);
 
         $this->assertNull($token);
 

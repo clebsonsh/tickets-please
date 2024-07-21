@@ -4,15 +4,16 @@ namespace Tests;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase;
+use Illuminate\Support\Arr;
 use Illuminate\Testing\TestResponse;
 
 abstract class BaseTest extends TestCase
 {
     protected User $user;
 
-    /**
-     * @var array <string, string>
-     */
+    protected string $token;
+
+    /** @var array <string, string> */
     protected array $validUser = [
         'email' => 'valid@email.com',
         'password' => 'password',
@@ -25,9 +26,16 @@ abstract class BaseTest extends TestCase
     {
         $this->user = User::factory($userData)->create();
 
-        return $this->postJson(route('login'), [
+        $response = $this->postJson(route('login'), [
             'email' => $userData['email'] ?? '',
             'password' => $userData['password'] ?? '',
         ]);
+
+        /** @var string $token */
+        $token = Arr::get($response, 'data.token') ?? '';
+
+        $this->token = $token;
+
+        return $response;
     }
 }

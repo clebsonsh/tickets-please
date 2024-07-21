@@ -22,8 +22,8 @@ class TicketFactory extends Factory
             'title' => fake()->words(3, true),
             'description' => fake()->paragraph(),
             'status' => fake()->randomElement(['A', 'C', 'H', 'X']),
-            'created_at' => now()->subDay(random_int(12, 20)),
-            'updated_at' => now()->subDay(random_int(1, 11)),
+            'created_at' => now()->subDays(random_int(12, 20)),
+            'updated_at' => now()->subDays(random_int(1, 11)),
         ];
     }
 }
